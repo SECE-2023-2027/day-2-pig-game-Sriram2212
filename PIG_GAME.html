@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dice Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #c31432, #c2071182);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .game {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      width: 700px;
+      height: 400px;
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      padding: 20px;
+      color: #fff;
+    }
+    .player {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.5s;
+    }
+    .player.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    h2 {
+      margin: 0;
+    }
+    .score {
+      font-size: 60px;
+      margin: 10px 0;
+    }
+    .current {
+      background: #e74c3c;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 24px;
+    }
+    .buttons {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .dice {
+      width: 60px;
+      height: 60px;
+      margin: 10px auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game">
+    <div class="player active" id="player--0">
+      <h2>PLAYER 1</h2>
+      <div class="score" id="score--0">0</div>
+      <div class="current">CURRENT<br><span id="current--0">0</span></div>
+    </div>
+
+    <div class="buttons">
+      <button id="btn--new">🔄 NEW GAME</button>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Alea_1.png" alt="Dice" class="dice" id="dice" />
+      <button id="btn--roll">🎲 ROLL DICE</button>
+      <button id="btn--hold">📥 HOLD</button>
+    </div>
+
+    <div class="player" id="player--1">
+      <h2>PLAYER 2</h2>
+      <div class="score" id="score--1">0</div>
+      <div class="current">CURRENT<br><span id="current--1">0</span></div>
+    </div>
+  </div>
+
+  <script>
+    const score0El = document.getElementById('score--0');
+    const score1El = document.getElementById('score--1');
+    const current0El = document.getElementById('current--0');
+    const current1El = document.getElementById('current--1');
+    const player0El = document.getElementById('player--0');
+    const player1El = document.getElementById('player--1');
+    const diceEl = document.getElementById('dice');
+    const btnNew = document.getElementById('btn--new');
+    const btnRoll = document.getElementById('btn--roll');
+    const btnHold = document.getElementById('btn--hold');
+
+    let scores, currentScore, activePlayer, playing;
+
+    const init = () => {
+      scores = [0, 0];
+      currentScore = 0;
+      activePlayer = 0;
+      playing = true;
+
+      score0El.textContent = 0;
+      score1El.textContent = 0;
+      current0El.textContent = 0;
+      current1El.textContent = 0;
+
+      diceEl.src = 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Alea_1.png';
+      player0El.classList.add('active');
+      player1El.classList.remove('active');
+    };
+
+    const switchPlayer = () => {
+      document.getElementById(`current--${activePlayer}`).textContent = 0;
+      currentScore = 0;
+      activePlayer = activePlayer === 0 ? 1 : 0;
+      player0El.classList.toggle('active');
+      player1El.classList.toggle('active');
+    };
+
+    btnRoll.addEventListener('click', function () {
+      if (playing) {
+        const dice = Math.trunc(Math.random() * 6) + 1;
+        diceEl.src =` https://upload.wikimedia.org/wikipedia/commons/${['2/2c/Alea_1', 'b/b8/Alea_2', '2/2f/Alea_3', '8/8d/Alea_4', '5/55/Alea_5', 'f/f4/Alea_6'][dice - 1]}.png`;
+
+        if (dice !== 1) {
+          currentScore += dice;
+          document.getElementById(`current--${activePlayer}`).textContent = currentScore;
+        } else {
+          switchPlayer();
+        }
+      }
+    });
+
+    btnHold.addEventListener('click', function () {
+      if (playing) {
+        scores[activePlayer] += currentScore;
+        document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
+
+        if (scores[activePlayer] >= 100) {
+          playing = false;
+          alert(`Player ${activePlayer + 1} wins!`);
+        } else {
+          switchPlayer();
+        }
+      }
+    });
+
+    btnNew.addEventListener('click', init);
+
+    init();
+  </script>
+
+</body>
+</html>
