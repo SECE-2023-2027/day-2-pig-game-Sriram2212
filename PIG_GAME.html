@@ -84,10 +84,10 @@
     </div>
 
     <div class="buttons">
-      <button id="btn--new">🔄 NEW GAME</button>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Alea_1.png" alt="Dice" class="dice" id="dice" />
-      <button id="btn--roll">🎲 ROLL DICE</button>
-      <button id="btn--hold">📥 HOLD</button>
+      <button id="btn--new">NEW GAME</button>
+      <img src="dice.png" alt="Dice" class="dice" id="dice" />
+      <button id="btn--roll">ROLL DICE</button>
+      <button id="btn--hold">HOLD</button>
     </div>
 
     <div class="player" id="player--1">
@@ -122,7 +122,7 @@
       current0El.textContent = 0;
       current1El.textContent = 0;
 
-      diceEl.src = 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Alea_1.png';
+      diceEl.src = 'dice.png';
       player0El.classList.add('active');
       player1El.classList.remove('active');
     };
@@ -163,9 +163,6 @@
       }
     });
 
-    btnNew.addEventListener('click', init);
-
-    init();
   </script>
 
 </body>
